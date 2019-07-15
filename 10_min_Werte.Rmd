@@ -1,0 +1,409 @@
+---
+title: "Temperaturextreme in Sachsen-Anhalt"
+author: "Manuel Mohr, MDR SACHSEN-ANHALT"
+date: "Stand: 15.07.2019"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+<!-- preparations -->
+
+```{r, set wd and clear enviroment, echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
+setwd("C:/MDRdata/DWD/10_min_Werte")
+remove(list = ls())
+options(OutDec = ",")
+```
+
+```{r, load packages, echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
+library(downloader)
+#library(dplyr)
+library(googlesheets)
+#library(readr)
+#library(stringr)
+library(tidyverse)
+```
+
+```{r, first register to google, echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
+#gs_auth(new_user = TRUE)
+sheet <- gs_title("Hoechsttemperaturen")
+#sheet <- gs_new("Hoechsttemperaturen", ws_title = "10min-Werte", input = "", verbose = FALSE)
+```
+
+```{r, scrape data, echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
+
+#scrape data
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_00445_now.zip", dest="./data/10minutenwerte_extrema_temp_00445_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_00722_now.zip", dest="./data/10minutenwerte_extrema_temp_00722_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_01052_now.zip", dest="./data/10minutenwerte_extrema_temp_01052_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_01544_now.zip", dest="./data/10minutenwerte_extrema_temp_01544_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_01605_now.zip", dest="./data/10minutenwerte_extrema_temp_01605_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_02044_now.zip", dest="./data/10minutenwerte_extrema_temp_02044_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_02704_now.zip", dest="./data/10minutenwerte_extrema_temp_02704_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_02878_now.zip", dest="./data/10minutenwerte_extrema_temp_02878_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_03126_now.zip", dest="./data/10minutenwerte_extrema_temp_03126_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_03226_now.zip", dest="./data/10minutenwerte_extrema_temp_03226_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_03821_now.zip", dest="./data/10minutenwerte_extrema_temp_03821_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_04032_now.zip", dest="./data/10minutenwerte_extrema_temp_04032_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_04036_now.zip", dest="./data/10minutenwerte_extrema_temp_04036_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_04445_now.zip", dest="./data/10minutenwerte_extrema_temp_04445_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_04642_now.zip", dest="./data/10minutenwerte_extrema_temp_04642_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_04878_now.zip", dest="./data/10minutenwerte_extrema_temp_04878_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_05158_now.zip", dest="./data/10minutenwerte_extrema_temp_05158_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_05490_now.zip", dest="./data/10minutenwerte_extrema_temp_05490_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_05629_now.zip", dest="./data/10minutenwerte_extrema_temp_05629_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_05750_now.zip", dest="./data/10minutenwerte_extrema_temp_05750_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_06266_now.zip", dest="./data/10minutenwerte_extrema_temp_06266_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_06273_now.zip", dest="./data/10minutenwerte_extrema_temp_06273_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_07364_now.zip", dest="./data/10minutenwerte_extrema_temp_07364_now.zip", mode="wb")
+
+Sys.sleep(runif(1, 1.0, 5.0))
+
+download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_07420_now.zip", dest="./data/10minutenwerte_extrema_temp_07420_now.zip", mode="wb")
+```
+
+```{r, read and export data, echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
+
+#read data
+
+Bernburg <- read_csv("./data/10minutenwerte_extrema_temp_00445_now.zip")
+write_csv(Bernburg, "C:/MDRdata/DWD/Bernburg.csv")
+Bernburg <- as_tibble(read.csv("C:/MDRdata/DWD/Bernburg.csv", sep = ";")) %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Bernburg = TX_10)
+Bernburg$MESS_DATUM <- as.character(Bernburg$MESS_DATUM)
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Brocken <- read_csv("./data/10minutenwerte_extrema_temp_00722_now.zip")
+write_csv(Brocken, "C:/MDRdata/DWD/Brocken.csv")
+Brocken <- read.csv("C:/MDRdata/DWD/Brocken.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Brocken = TX_10)
+Brocken$MESS_DATUM <- as.character(Brocken$MESS_DATUM)
+all_data <- left_join(Bernburg, Brocken)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Drewitz <- read_csv("./data/10minutenwerte_extrema_temp_01052_now.zip")
+write_csv(Drewitz, "C:/MDRdata/DWD/Drewitz.csv")
+Drewitz <- read.csv("C:/MDRdata/DWD/Drewitz.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Drewitz = TX_10)
+Drewitz$MESS_DATUM <- as.character(Drewitz$MESS_DATUM)
+all_data <- left_join(all_data, Drewitz)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Gardelegen <- read_csv("./data/10minutenwerte_extrema_temp_01544_now.zip")
+write_csv(Gardelegen, "C:/MDRdata/DWD/Gardelegen.csv")
+Gardelegen <- read.csv("C:/MDRdata/DWD/Gardelegen.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Gardelegen = TX_10)
+Gardelegen$MESS_DATUM <- as.character(Gardelegen$MESS_DATUM)
+all_data <- left_join(all_data, Gardelegen)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Genthin <- read_csv("./data/10minutenwerte_extrema_temp_01605_now.zip")
+write_csv(Genthin, "C:/MDRdata/DWD/Genthin.csv")
+Genthin <- read.csv("C:/MDRdata/DWD/Genthin.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Genthin = TX_10)
+Genthin$MESS_DATUM <- as.character(Genthin$MESS_DATUM)
+all_data <- left_join(all_data, Genthin)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Harzgerode <- read_csv("./data/10minutenwerte_extrema_temp_02044_now.zip")
+write_csv(Harzgerode, "C:/MDRdata/DWD/Harzgerode.csv")
+Harzgerode <- read.csv("C:/MDRdata/DWD/Harzgerode.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Harzgerode = TX_10)
+Harzgerode$MESS_DATUM <- as.character(Harzgerode$MESS_DATUM)
+all_data <- left_join(all_data, Harzgerode)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Koethen <- read_csv("./data/10minutenwerte_extrema_temp_02704_now.zip")
+write_csv(Koethen, "C:/MDRdata/DWD/Koethen.csv")
+Koethen <- read.csv("C:/MDRdata/DWD/Koethen.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Koethen = TX_10)
+Koethen$MESS_DATUM <- as.character(Koethen$MESS_DATUM)
+all_data <- left_join(all_data, Koethen)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Bad_Lauchstaedt <- read_csv("./data/10minutenwerte_extrema_temp_02878_now.zip")
+write_csv(Bad_Lauchstaedt, "C:/MDRdata/DWD/Bad_Lauchstaedt.csv")
+Bad_Lauchstaedt <- read.csv("C:/MDRdata/DWD/Bad_Lauchstaedt.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Bad_Lauchstaedt = TX_10)
+Bad_Lauchstaedt$MESS_DATUM <- as.character(Bad_Lauchstaedt$MESS_DATUM)
+all_data <- left_join(all_data, Bad_Lauchstaedt)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Magdeburg <- read_csv("./data/10minutenwerte_extrema_temp_03126_now.zip")
+write_csv(Magdeburg, "C:/MDRdata/DWD/Magdeburg.csv")
+Magdeburg <- read.csv("C:/MDRdata/DWD/Magdeburg.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Magdeburg = TX_10)
+Magdeburg$MESS_DATUM <- as.character(Magdeburg$MESS_DATUM)
+all_data <- left_join(all_data, Magdeburg)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Aschersleben <- read_csv("./data/10minutenwerte_extrema_temp_03226_now.zip")
+write_csv(Aschersleben, "C:/MDRdata/DWD/Aschersleben.csv")
+Aschersleben <- read.csv("C:/MDRdata/DWD/Aschersleben.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Aschersleben = TX_10)
+Aschersleben$MESS_DATUM <- as.character(Aschersleben$MESS_DATUM)
+all_data <- left_join(all_data, Aschersleben)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Osterfeld <- read_csv("./data/10minutenwerte_extrema_temp_03821_now.zip")
+write_csv(Osterfeld, "C:/MDRdata/DWD/Osterfeld.csv")
+Osterfeld <- read.csv("C:/MDRdata/DWD/Osterfeld.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Osterfeld = TX_10)
+Osterfeld$MESS_DATUM <- as.character(Osterfeld$MESS_DATUM)
+all_data <- left_join(all_data, Osterfeld)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Quedlinburg <- read_csv("./data/10minutenwerte_extrema_temp_04032_now.zip")
+write_csv(Quedlinburg, "C:/MDRdata/DWD/Quedlinburg.csv")
+Quedlinburg <- read.csv("C:/MDRdata/DWD/Quedlinburg.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Quedlinburg = TX_10)
+Quedlinburg$MESS_DATUM <- as.character(Quedlinburg$MESS_DATUM)
+all_data <- left_join(all_data, Quedlinburg)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Querfurt <- read_csv("./data/10minutenwerte_extrema_temp_04036_now.zip")
+write_csv(Querfurt, "C:/MDRdata/DWD/Querfurt.csv")
+Querfurt <- read.csv("C:/MDRdata/DWD/Querfurt.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Querfurt = TX_10)
+Querfurt$MESS_DATUM <- as.character(Querfurt$MESS_DATUM)
+all_data <- left_join(all_data, Querfurt)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Wernigerode_Schierke <- read_csv("./data/10minutenwerte_extrema_temp_04445_now.zip")
+write_csv(Wernigerode_Schierke, "Wernigerode_Schierke.csv")
+Wernigerode_Schierke <- read.csv("Wernigerode_Schierke.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Wernigerode_Schierke = TX_10)
+Wernigerode_Schierke$MESS_DATUM <- as.character(Wernigerode_Schierke$MESS_DATUM)
+all_data <- left_join(all_data, Wernigerode_Schierke)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Seehausen <- read_csv("./data/10minutenwerte_extrema_temp_04642_now.zip")
+write_csv(Seehausen, "C:/MDRdata/DWD/Seehausen.csv")
+Seehausen <- read.csv("C:/MDRdata/DWD/Seehausen.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Seehausen = TX_10)
+Seehausen$MESS_DATUM <- as.character(Seehausen$MESS_DATUM)
+all_data <- left_join(all_data, Seehausen)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Oberharz <- read_csv("./data/10minutenwerte_extrema_temp_04878_now.zip")
+write_csv(Oberharz, "C:/MDRdata/DWD/Oberharz.csv")
+Oberharz <- read.csv("C:/MDRdata/DWD/Oberharz.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Oberharz = TX_10)
+Oberharz$MESS_DATUM <- as.character(Oberharz$MESS_DATUM)
+all_data <- left_join(all_data, Oberharz)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Ummendorf <- read_csv("./data/10minutenwerte_extrema_temp_05158_now.zip")
+write_csv(Ummendorf, "C:/MDRdata/DWD/Ummendorf.csv")
+Ummendorf <- read.csv("C:/MDRdata/DWD/Ummendorf.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Ummendorf = TX_10)
+Ummendorf$MESS_DATUM <- as.character(Ummendorf$MESS_DATUM)
+all_data <- left_join(all_data, Ummendorf)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Wernigerode <- read_csv("./data/10minutenwerte_extrema_temp_05490_now.zip")
+write_csv(Wernigerode, "C:/MDRdata/DWD/Wernigerode.csv")
+Wernigerode <- read.csv("C:/MDRdata/DWD/Wernigerode.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Wernigerode = TX_10)
+Wernigerode$MESS_DATUM <- as.character(Wernigerode$MESS_DATUM)
+all_data <- left_join(all_data, Wernigerode)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Wittenberg <- read_csv("./data/10minutenwerte_extrema_temp_05629_now.zip")
+write_csv(Wittenberg, "C:/MDRdata/DWD/Wittenberg.csv")
+Wittenberg <- read.csv("C:/MDRdata/DWD/Wittenberg.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Wittenberg = TX_10)
+Wittenberg$MESS_DATUM <- as.character(Wittenberg$MESS_DATUM)
+all_data <- left_join(all_data, Wittenberg)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Zeitz <- read_csv("./data/10minutenwerte_extrema_temp_05750_now.zip")
+write_csv(Zeitz, "C:/MDRdata/DWD/Zeitz.csv")
+Zeitz <- read.csv("C:/MDRdata/DWD/Zeitz.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Zeitz = TX_10)
+Zeitz$MESS_DATUM <- as.character(Zeitz$MESS_DATUM)
+all_data <- left_join(all_data, Zeitz)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Huy_Pabstorf <- read_csv("./data/10minutenwerte_extrema_temp_06266_now.zip")
+write_csv(Huy_Pabstorf, "C:/MDRdata/DWD/Huy_Pabstorf.csv")
+Huy_Pabstorf <- read.csv("C:/MDRdata/DWD/Huy_Pabstorf.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Huy_Pabstorf = TX_10)
+Huy_Pabstorf$MESS_DATUM <- as.character(Huy_Pabstorf$MESS_DATUM)
+all_data <- left_join(all_data, Huy_Pabstorf)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Demker <- read_csv("./data/10minutenwerte_extrema_temp_06273_now.zip")
+write_csv(Demker, "C:/MDRdata/DWD/Demker.csv")
+Demker <- read.csv("C:/MDRdata/DWD/Demker.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Demker = TX_10)
+Demker$MESS_DATUM <- as.character(Demker$MESS_DATUM)
+all_data <- left_join(all_data, Demker)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Jessnitz <- read_csv("./data/10minutenwerte_extrema_temp_07364_now.zip")
+write_csv(Jessnitz, "C:/MDRdata/DWD/Jessnitz.csv")
+Jessnitz <- read.csv("C:/MDRdata/DWD/Jessnitz.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Jessnitz = TX_10)
+Jessnitz$MESS_DATUM <- as.character(Jessnitz$MESS_DATUM)
+all_data <- left_join(all_data, Jessnitz)
+write.csv(all_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8")
+
+Sys.sleep(runif(1, 1.0, 2.0))
+
+Naumburg <- read_csv("./data/10minutenwerte_extrema_temp_07420_now.zip")
+write_csv(Naumburg, "C:/MDRdata/DWD/Naumburg.csv")
+Naumburg <- read.csv("C:/MDRdata/DWD/Naumburg.csv", sep = ";") %>% 
+           select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
+           rename(Naumburg = TX_10)
+Naumburg$MESS_DATUM <- as.character(Naumburg$MESS_DATUM)
+all_data <- left_join(all_data, Naumburg)
+
+#create data for export
+
+final_data <- all_data %>%
+              mutate(Uhrzeit = substr(all_data$MESS_DATUM, 9, 13)) %>% 
+              mutate(Datum = substr(all_data$MESS_DATUM, 1,8)) %>% 
+              select(Uhrzeit, Datum, everything()) %>% 
+              select(c(-MESS_DATUM))
+final_data$Uhrzeit <- sub("([[:digit:]]{2,2})$", ":\\1", final_data$Uhrzeit)
+
+write.csv2(final_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8", row.names = FALSE)
+
+#export data to google sheets
+
+gs_edit_cells(ss = sheet, ws = 1, input = final_data, anchor = "A1", col_names = TRUE)
+```

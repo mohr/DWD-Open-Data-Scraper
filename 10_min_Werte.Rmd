@@ -417,4 +417,5 @@ write.csv2(final_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8",
   #export data to google sheets
 
 gs_edit_cells(ss = sheet, ws = 1, input = final_data, anchor = "A1", col_names = TRUE)
+
 ```

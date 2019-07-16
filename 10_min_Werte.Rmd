@@ -1,7 +1,5 @@
 ---
 title: "Temperaturextreme in Sachsen-Anhalt"
-author: "Manuel Mohr, MDR SACHSEN-ANHALT"
-date: "Stand: 15.07.2019"
 output:
   html_document:
     df_print: paged
@@ -18,24 +16,33 @@ options(OutDec = ",")
 
 ```{r, load packages, echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
 library(downloader)
-#library(dplyr)
 library(googlesheets)
-#library(readr)
-#library(stringr)
 library(tidyverse)
 ```
 
 ```{r, first register to google, echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
+
+  #When running the script for the first time, you must first connect to Google Drive: 
+
 #gs_auth(new_user = TRUE)
-sheet <- gs_title("Hoechsttemperaturen")
+
+  #and then create a new sheet:
+
 #sheet <- gs_new("Hoechsttemperaturen", ws_title = "10min-Werte", input = "", verbose = FALSE)
+
+  #In the following script runs the reference to the already existing sheet is sufficient:
+
+sheet <- gs_title("Hoechsttemperaturen")
+
 ```
 
 ```{r, scrape data, echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
 
-#scrape data
+  #scrape data for Sachsen-Anhalt
 
 download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/10minutenwerte_extrema_temp_00445_now.zip", dest="./data/10minutenwerte_extrema_temp_00445_now.zip", mode="wb")
+
+  #Short stops to avoid overwhelming the FTP server:
 
 Sys.sleep(runif(1, 1.0, 5.0))
 
@@ -131,7 +138,7 @@ download("https://opendata.dwd.de/climate_environment/CDC/observations_germany/c
 
 ```{r, read and export data, echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
 
-#read data
+  #Reading in the data is a little tricky since the output format is weird:
 
 Bernburg <- read_csv("./data/10minutenwerte_extrema_temp_00445_now.zip")
 write_csv(Bernburg, "C:/MDRdata/DWD/Bernburg.csv")
@@ -139,6 +146,8 @@ Bernburg <- as_tibble(read.csv("C:/MDRdata/DWD/Bernburg.csv", sep = ";")) %>%
            select(c(-STATIONS_ID, -QN, -TX5_10, -TN_10, -TN5_10, -eor)) %>% 
            rename(Bernburg = TX_10)
 Bernburg$MESS_DATUM <- as.character(Bernburg$MESS_DATUM)
+
+  #Short stops, as my PC is slow:
 
 Sys.sleep(runif(1, 1.0, 2.0))
 
@@ -392,7 +401,7 @@ Naumburg <- read.csv("C:/MDRdata/DWD/Naumburg.csv", sep = ";") %>%
 Naumburg$MESS_DATUM <- as.character(Naumburg$MESS_DATUM)
 all_data <- left_join(all_data, Naumburg)
 
-#create data for export
+  #create data for export
 
 final_data <- all_data %>%
               mutate(Uhrzeit = substr(all_data$MESS_DATUM, 9, 13)) %>% 
@@ -403,7 +412,7 @@ final_data$Uhrzeit <- sub("([[:digit:]]{2,2})$", ":\\1", final_data$Uhrzeit)
 
 write.csv2(final_data, file = "Höchsttemperaturen.csv", fileEncoding = "UTF-8", row.names = FALSE)
 
-#export data to google sheets
+  #export data to google sheets
 
 gs_edit_cells(ss = sheet, ws = 1, input = final_data, anchor = "A1", col_names = TRUE)
 ```

@@ -4,6 +4,6 @@
 
 Source: https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/
 
-List of DWD-stations: https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/zehn_now_tx_Beschreibung_Stationen.txt
+List of all DWD-stations in Germany with 10 minute data: https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/extreme_temperature/now/zehn_now_tx_Beschreibung_Stationen.txt
 
 Note: This is my first self-programmed scraper, so please be patient :)

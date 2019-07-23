@@ -9,8 +9,9 @@ output:
 <!-- preparations -->
 
 ```{r, set wd and clear enviroment, echo=FALSE, message=FALSE, warning=FALSE, include = FALSE}
-setwd("C:/MDRdata/DWD/10_min_Werte")
+#setwd("to/a/path/of/your/choice")
 remove(list = ls())
+dir.create("./data")
 options(OutDec = ",")
 ```
 
